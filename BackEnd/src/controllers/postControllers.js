@@ -1,31 +1,32 @@
 import {
-    createGetModel,
-    getIDModel,
-    createPostModel,
-    createDeleteModel,
-    createLikeModel,
-    createPutUpdate,
-  } from "../models/postModels.js";
-  
-  export const getPost = async (req, res, next) => {
-    try {
-      const result = await createGetModel();
-      res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  };
-  
-  export const getIDPost = async (req, res, next) => {
-    const { id } = req.params;
-    try {
-      const result = await getIDModel(id);
-      res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
+  createGetModel,
+  getIDModel,
+  createPostModel,
+  createLikeModel,
+  createPutUpdate,
+  createPatch,
+  createDeleteModel,
+} from "../models/postModels.js";
+
+export const getPost = async (req, res, next) => {
+  try {
+    const result = await createGetModel();
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
 };
-  
+
+export const getIDPost = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const result = await getIDModel(id);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const postPost = async (req, res, next) => {
   const { titulo, img, descripcion } = req.body;
   try {
@@ -37,7 +38,6 @@ export const postPost = async (req, res, next) => {
   }
 };
 
-// likes desde fornt
 export const putLikePost = async (req, res, next) => {
   const { id } = req.params;
   const { likes } = req.body;
@@ -49,15 +49,26 @@ export const putLikePost = async (req, res, next) => {
   }
 };
 
-
-
-//update from postman
+//update from client
 export const putUpdatePost = async (req, res, next) => {
   const { id } = req.params;
-  const { titulo, url, descripcion, likes } = req.body;
+  const { titulo, img, descripcion, likes } = req.body;
   try {
-    const result = await createPutUpdate(id, titulo, url, descripcion, likes);
+    const result = await createPutUpdate(id, titulo, img, descripcion, likes);
     res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//patch from client
+export const patchPost = async (req, res, next) => {
+  const { id } = req.params;
+  const { titulo, img, descripcion, likes } = req.body;
+  try {
+    const result = await createPatch(id, titulo, img, descripcion, likes);
+    res.status(200).json(result);
+
   } catch (error) {
     next(error);
   }

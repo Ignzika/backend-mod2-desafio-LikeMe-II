@@ -6,6 +6,7 @@ import {
   deltePost,
   putLikePost,
   putUpdatePost,
+  patchPost,
   notFound,
 } from "../controllers/postControllers.js";
 const router = Router();
@@ -30,6 +31,7 @@ router
   .route("/posts/:id")
   .get(getIDPost) // visualizar por id individual
   .put(putUpdatePost) // update for client (postman, thunder)
+  .patch(patchPost) //Patch for client
   .delete(deltePost) //delete
   .all(function (req, res, next) {
     res.status(405).json({ message: "not allowed" });

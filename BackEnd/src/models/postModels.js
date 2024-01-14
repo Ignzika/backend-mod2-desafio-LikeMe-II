@@ -48,7 +48,6 @@ export const createPostModel = async (titulo, img, descripcion) => {
 };
 
 // likes por id
-
 export const createLikeModel = async (id, likes) => {
   try {
     const SQLquery = {
@@ -63,12 +62,12 @@ export const createLikeModel = async (id, likes) => {
   }
 };
 
-//  update id on postman
-export const createPutUpdate = async (id, titulo, url, descripcion, likes) => {
+//  update id on client
+export const createPutUpdate = async (id, titulo, img, descripcion, likes) => {
   try {
     const SQLquery = {
       text: "UPDATE posts SET titulo = $2, img = $3, descripcion = $4, likes =$5 WHERE id=$1;",
-      values: [id, titulo, url, descripcion, likes],
+      values: [id, titulo, img, descripcion, likes],
     };
     const response = await pool.query(SQLquery);
     return response.rows;
@@ -77,6 +76,24 @@ export const createPutUpdate = async (id, titulo, url, descripcion, likes) => {
     throw new Error(error.message); //"Error UPDATing on something by ID"
   }
 };
+
+//patch id on client
+export const createPatch = async (id, titulo, img, descripcion, likes) => {
+  try {
+    const SQLquery = {
+      text: "UPDATE posts SET titulo = COALESCE($2, titulo), img= COALESCE($3, img), descripcion = COALESCE($4, descripcion), likes = COALESCE($5, likes) WHERE id = $1 RETURNING *;",
+      values: [id, titulo, img, descripcion, likes],
+    };
+    const response = await pool.query(SQLquery);
+    if (response.rowCount == 0) {
+      throw new Error("Not Found posts, check ID");
+    }
+    return response.rows;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message); //"Error PATCHing something by ID"
+  }
+}
 
 // delete from id
 export const createDeleteModel = async (id) => {
